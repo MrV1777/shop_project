@@ -18,7 +18,7 @@
                 <div class="col-md-4 offset-md-4">
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title">Login</h5>
+                            <h5 class="card-title">LoginSSSS</h5>
                         </div>
                         <div class="card-body">
                             <form method="POST" action="{{ route('login.post') }}">
