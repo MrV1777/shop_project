@@ -29,7 +29,7 @@ class AuthController extends Controller
                         ->with('success', 'You have Successfully logged in');
         }
        
-        return redirect("login")->with('error', 'Oppes! You have entered invalid credentials');
+        return redirect("login")->with('error', 'Oops! You have entered invalid credentials');
     }
     
     public function showRegistrationForm()
@@ -49,6 +49,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'user', // Default role for new registrations
         ]);
 
         Auth::login($user);

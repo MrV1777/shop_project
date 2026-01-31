@@ -25,7 +25,7 @@ class ProductController extends Controller
 
         $imageName = null;
         if ($request->hasFile('image')) {
-            $imageName = time().'.'.$request->image->extension();
+            $imageName = time().'_'.uniqid().'.'.$request->image->extension();
             $request->image->move(public_path('images'), $imageName);
         }
 
@@ -36,12 +36,12 @@ class ProductController extends Controller
             'image' => $imageName
         ]);
 
-        return redirect()->back()->with('success', 'เพิ่มสินค้าเรียบร้อยแล้ว');
+        return redirect()->back()->with('success', 'Product added successfully.');
     }
     
     public function index()
     {
-        $products = Product::all();
+        $products = Product::paginate(10);
         return view('product.Listproduct', compact('products'));
     }
     
@@ -67,7 +67,7 @@ class ProductController extends Controller
                 File::delete(public_path('images/'.$product->image));
             }
 
-            $imageName = time().'.'.$request->image->extension();
+            $imageName = time().'_'.uniqid().'.'.$request->image->extension();
             $request->image->move(public_path('images'), $imageName);
             $product->image = $imageName;
         }
@@ -79,7 +79,7 @@ class ProductController extends Controller
             'image' => $product->image
         ]);
 
-        return redirect('/products')->with('success', 'อัปเดตเรียบร้อย');
+        return redirect('/products')->with('success', 'Product updated successfully.');
     }
     
     public function destroy($id)
@@ -91,7 +91,7 @@ class ProductController extends Controller
         }
 
         $product->delete();
-        return redirect()->back()->with('success', 'ลบสินค้าแล้ว');
+        return redirect()->back()->with('success', 'Product deleted successfully.');
     }
 
 }
