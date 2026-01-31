@@ -10,7 +10,7 @@ Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('
 Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Dashboard route (protected by auth middleware)
+
 Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware('auth');
+    return view('home.dashboard');
+})->middleware('auth')->name('dashboard');
