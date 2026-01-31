@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Product List')
+@section('title', 'Manage Users')
 
 @section('content')
 <div class="container-fluid">
@@ -8,8 +8,8 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4>Product List</h4>
-                    <a href="{{ route('products.create') }}" class="btn btn-primary">Add New Product</a>
+                    <h4>Users Management</h4>
+                    <a href="{{ route('admin.users.create') }}" class="btn btn-primary">Add New User</a>
                 </div>
                 <div class="card-body">
                     @if(session('success'))
@@ -25,35 +25,36 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Name</th>
-                                    <th>Quantity</th>
-                                    <th>Image</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Created At</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($products as $product)
+                                @foreach($users as $user)
                                 <tr>
-                                    <td>{{ $product->id }}</td>
-                                    <td>{{ $product->name }}</td>
-                                    <td>{{ $product->quantity }}</td>
+                                    <td>{{ $user->id }}</td>
+                                    <td>{{ $user->name }}</td>
+                                    <td>{{ $user->email }}</td>
                                     <td>
-                                        @if($product->image)
-                                            <img src="{{ asset('images/' . $product->image) }}" width="60" class="img-thumbnail">
-                                        @else
-                                            <span class="text-muted">No Image</span>
-                                        @endif
+                                        <span class="badge bg-{{ $user->role === 'admin' ? 'danger' : 'primary' }}">
+                                            {{ ucfirst($user->role) }}
+                                        </span>
                                     </td>
+                                    <td>{{ $user->created_at->format('M d, Y') }}</td>
                                     <td>
-                                        <a href="{{ route('products.edit', $product) }}" class="btn btn-sm btn-primary">Edit</a>
-                                        
-                                        <form action="{{ route('products.destroy', $product) }}" method="POST" class="d-inline">
+                                        <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-primary">Edit</a>
+                                        @if($user->id !== Auth::id())
+                                        <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger" 
-                                                    onclick="return confirm('Are you sure you want to delete this product?')">
+                                                    onclick="return confirm('Are you sure you want to delete this user?')">
                                                 Delete
                                             </button>
                                         </form>
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach
@@ -62,7 +63,7 @@
                     </div>
 
                     <div class="d-flex justify-content-center">
-                        {{ $products->links() }}
+                        {{ $users->links() }}
                     </div>
                 </div>
             </div>

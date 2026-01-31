@@ -25,8 +25,14 @@ class AuthController extends Controller
 
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
-            return redirect()->intended('dashboard')
-                        ->with('success', 'You have Successfully logged in');
+            // Redirect based on user role
+            if (Auth::user()->role === 'admin') {
+                return redirect()->intended(route('products.index'))
+                            ->with('success', 'You have Successfully logged in as Admin');
+            } else {
+                return redirect()->intended(route('user.home'))
+                            ->with('success', 'You have Successfully logged in');
+            }
         }
        
         return redirect("login")->with('error', 'Oops! You have entered invalid credentials');
@@ -54,8 +60,14 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect()->intended('dashboard')
-                    ->with('success', 'You have successfully registered and logged in!');
+        // Redirect based on user role
+        if ($user->role === 'admin') {
+            return redirect()->intended(route('products.index'))
+                        ->with('success', 'You have successfully registered and logged in as Admin!');
+        } else {
+            return redirect()->intended(route('user.home'))
+                        ->with('success', 'You have successfully registered and logged in!');
+        }
     }
 
     public function logout(Request $request)

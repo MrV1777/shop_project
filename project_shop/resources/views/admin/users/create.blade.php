@@ -1,14 +1,14 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
-@section('title', 'Register')
+@section('title', 'Add New User')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-4">
-            <div class="card shadow-sm mt-5">
-                <div class="card-header text-center">
-                    <h4>Create New Account</h4>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Add New User</h4>
                 </div>
                 <div class="card-body">
                     @if(session('success'))
@@ -17,7 +17,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         </div>
                     @endif
-                    
+
                     @if(session('error'))
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             {{ session('error') }}
@@ -35,16 +35,16 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('register.post') }}">
+                    <form method="POST" action="{{ route('admin.users.store') }}">
                         @csrf
                         
                         <div class="mb-3">
-                            <label for="name" class="form-label">Full Name</label>
-                            <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" required autofocus>
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" required>
                         </div>
                         
                         <div class="mb-3">
-                            <label for="email" class="form-label">Email Address</label>
+                            <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" required>
                         </div>
                         
@@ -58,12 +58,17 @@
                             <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
                         </div>
                         
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary">Register</button>
+                        <div class="mb-3">
+                            <label for="role" class="form-label">Role</label>
+                            <select class="form-select" id="role" name="role" required>
+                                <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>User</option>
+                                <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                            </select>
                         </div>
                         
-                        <div class="mt-3 text-center">
-                            <a href="{{ route('login') }}">Already have an account? Login here</a>
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ route('admin.users.index') }}" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Create User</button>
                         </div>
                     </form>
                 </div>

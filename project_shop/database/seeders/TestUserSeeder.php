@@ -13,7 +13,7 @@ class TestUserSeeder extends Seeder
     public function run(): void
     {
         \App\Models\User::updateOrInsert(
-            ['email' => 'test@example.com'],
+            ['email' => 'user@example.com'],
             [
                 'name' => 'Test User',
                 'password' => Hash::make('password123'),

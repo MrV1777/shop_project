@@ -45,13 +45,34 @@ class ProductController extends Controller
         return view('product.Listproduct', compact('products'));
     }
     
-    public function edit($id)
+    /**
+     * Display a listing of products for normal users.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function userIndex(Request $request)
     {
-        $product = Product::findOrFail($id);
+        $query = Product::query();
+        
+        // Handle search
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                  ->orWhere('description', 'LIKE', "%{$search}%");
+            });
+        }
+        
+        $products = $query->paginate(8);
+        return view('home.user_products', compact('products'));
+    }
+    
+    public function edit(Product $product)
+    {
         return view('product.edit', compact('product'));
     }
     
-    public function update(Request $request, $id)
+    public function update(Request $request, Product $product)
     {
         $request->validate([
             'name' => 'required',
@@ -59,8 +80,6 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'image' => 'nullable|image'
         ]);
-        
-        $product = Product::findOrFail($id);
 
         if ($request->hasFile('image')) {
             if ($product->image && File::exists(public_path('images/'.$product->image))) {
@@ -79,13 +98,11 @@ class ProductController extends Controller
             'image' => $product->image
         ]);
 
-        return redirect('/products')->with('success', 'Product updated successfully.');
+        return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }
     
-    public function destroy($id)
+    public function destroy(Product $product)
     {
-        $product = Product::findOrFail($id);
-
         if ($product->image && File::exists(public_path('images/'.$product->image))) {
             File::delete(public_path('images/'.$product->image));
         }
