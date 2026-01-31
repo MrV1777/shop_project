@@ -14,3 +14,13 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/dashboard', function () {
     return view('home.dashboard');
 })->middleware('auth')->name('dashboard');
+
+
+use App\Http\Controllers\ProductController;
+
+Route::get('/product/create', [ProductController::class, 'create']);
+Route::post('/product/store', [ProductController::class, 'store']);
+Route::get('/products', [ProductController::class, 'index']);
+Route::get('/product/{id}/edit', [ProductController::class, 'edit']);
+Route::put('/product/{id}', [ProductController::class, 'update']);
+Route::delete('/product/{id}', [ProductController::class, 'destroy']);
