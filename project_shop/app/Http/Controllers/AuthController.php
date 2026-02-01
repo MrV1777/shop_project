@@ -13,6 +13,15 @@ class AuthController extends Controller
 {
     public function index()
     {
+        // If user is already logged in, redirect them to appropriate dashboard
+        if (Auth::check()) {
+            if (Auth::user()->role === 'admin') {
+                return redirect()->route('admin.dashboard');
+            } else {
+                return redirect()->route('user.home');
+            }
+        }
+        
         return view('login.login');
     }
 

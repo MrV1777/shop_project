@@ -1,6 +1,6 @@
-@extends('layouts.user')
+@extends('layouts.public')
 
-@section('title', 'Home - Shop Application')
+@section('title', 'Products - Shop Application')
 
 @section('content')
 <div class="container my-5">
@@ -11,9 +11,7 @@
             <p class="lead">Discover amazing products at unbeatable prices</p>
             <div class="mt-4">
                 <a href="#products" class="btn btn-light btn-lg me-2">Shop Now</a>
-                <a href="{{ route('cart.index') }}" class="btn btn-outline-light btn-lg">
-                    <i class="bi bi-cart"></i> View Cart
-                </a>
+                <a href="#" class="btn btn-outline-light btn-lg">View Categories</a>
             </div>
         </div>
     </section>
@@ -22,7 +20,7 @@
     <section class="mb-5">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <form action="{{ route('user.products') }}" method="GET">
+                <form action="{{ route('products.index') }}" method="GET">
                     <div class="input-group search-bar">
                         <input type="text" class="form-control form-control-lg" placeholder="Search products..." name="search" value="{{ request('search') }}">
                         <button class="btn btn-primary btn-lg" type="submit">

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.public')
 
 @section('title', 'Register')
 
@@ -64,6 +64,10 @@
                         
                         <div class="mt-3 text-center">
                             <a href="{{ route('login') }}">Already have an account? Login here</a>
+                        </div>
+                        
+                        <div class="mt-3 text-center">
+                            <a href="{{ route('home') }}">← Back to Home</a>
                         </div>
                     </form>
                 </div>

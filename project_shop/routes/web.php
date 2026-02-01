@@ -5,13 +5,32 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 
+// Public Routes - Product browsing available to everyone
+Route::get('/', [ProductController::class, 'publicIndex'])->name('home');
+Route::get('/products', [ProductController::class, 'publicIndex'])->name('products.index');
+Route::get('/product/{product}', [ProductController::class, 'show'])->name('products.show');
+
 // Authentication Routes
-Route::get('/', [AuthController::class, 'index'])->name('login');
+Route::get('/login', [AuthController::class, 'index'])->name('login');
 Route::post('/login', [AuthController::class, 'postLogin'])->name('login.post');
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Cart Routes (require authentication)
+Route::middleware(['auth', 'user'])->group(function () {
+    Route::get('/cart', [ProductController::class, 'cart'])->name('cart.index');
+    Route::post('/cart/add/{product}', [ProductController::class, 'addToCart'])->name('cart.add');
+    Route::post('/cart/remove/{product}', [ProductController::class, 'removeFromCart'])->name('cart.remove');
+    Route::post('/cart/update/{product}', [ProductController::class, 'updateCart'])->name('cart.update');
+    
+    // Checkout Routes (require authentication)
+    Route::get('/checkout', [ProductController::class, 'checkout'])->name('checkout.index');
+    Route::post('/checkout', [ProductController::class, 'processCheckout'])->name('checkout.process');
+    
+    // User Home
+    Route::get('/home', [ProductController::class, 'userIndex'])->name('user.home');
+});
 
 // Admin group
 Route::middleware(['auth', 'admin'])->group(function () {
@@ -28,17 +47,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
         'destroy' => 'admin.users.destroy',
     ]);
     
-    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-    Route::get('/product/create', [ProductController::class, 'create'])->name('products.create');
-    Route::post('/product/store', [ProductController::class, 'store'])->name('products.store');
-    Route::get('/product/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
-    Route::put('/product/{product}', [ProductController::class, 'update'])->name('products.update');
-    Route::delete('/product/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
-});
-
-
-// Normal User group
-Route::middleware(['auth', 'user'])->group(function () {    
-    Route::get('/home', [ProductController::class, 'userIndex'])->name('user.home');
-    Route::get('/user/products', [ProductController::class, 'userIndex'])->name('user.products');
+    Route::get('/admin/products', [ProductController::class, 'index'])->name('admin.products.index');
+    Route::get('/admin/product/create', [ProductController::class, 'create'])->name('admin.products.create');
+    Route::post('/admin/product/store', [ProductController::class, 'store'])->name('admin.products.store');
+    Route::get('/admin/product/{product}/edit', [ProductController::class, 'edit'])->name('admin.products.edit');
+    Route::put('/admin/product/{product}', [ProductController::class, 'update'])->name('admin.products.update');
+    Route::delete('/admin/product/{product}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
 });
