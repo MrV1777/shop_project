@@ -25,6 +25,7 @@
                             <p>You have successfully logged in.</p>
                             
                             <div class="d-grid gap-2">
+                                <a href="/product/create" class="btn btn-primary">Add Product</a>
                                 <a href="{{ route('logout') }}" class="btn btn-danger"
                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     Logout
