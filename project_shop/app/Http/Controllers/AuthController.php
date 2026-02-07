@@ -4,60 +4,47 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class AuthController extends Controller
 {
-    public function showLoginForm()
-    {
+    public function loginForm() {
         return view('auth.login');
     }
-    
-    public function showRegisterForm()
-    {
+
+    public function registerForm() {
         return view('auth.register');
     }
-    
-    public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+
+    public function register(Request $request) {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:6|confirmed'
         ]);
-        
+
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+        return redirect()->route('login')->with('success','Register success!');
+    }
+
+    public function login(Request $request) {
+        $credentials = $request->only('email','password');
+
         if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-            return redirect()->intended('/');
+            return redirect('/home');
         }
-        
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ]);
+
+        return back()->with('error','Email or password is incorrect');
     }
-    
-    public function register(Request $request)
-    {
-        $validatedData = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
-        
-        $validatedData['password'] = bcrypt($validatedData['password']);
-        $validatedData['role'] = 'user'; // Default role is user
-        
-        $user = \App\Models\User::create($validatedData);
-        
-        Auth::login($user);
-        
-        return redirect('/');
-    }
-    
-    public function logout(Request $request)
-    {
+
+    public function logout() {
         Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        
-        return redirect('/');
+        return redirect('/login');
     }
 }
