@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <!--begin::Head-->
   <head>
@@ -527,6 +527,63 @@
           </div>
           <!--end::Container-->
         </div>
+        <!--end::App Content Header-->
+
+        <!-- Statistics Cards -->
+        <div class="app-content">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-lg-3 col-6">
+                <div class="small-box bg-primary">
+                  <div class="inner">
+                    <h3>{{ $products->count() }}</h3>
+                    <p>Total Products</p>
+                  </div>
+                  <div class="icon">
+                    <i class="bi bi-box-seam"></i>
+                  </div>
+                  <a href="/products" class="small-box-footer">
+                    View All <i class="bi bi-arrow-right"></i>
+                  </a>
+                </div>
+              </div>
+              <div class="col-lg-3 col-6">
+                <div class="small-box bg-success">
+                  <div class="inner">
+                    <h3>{{ $products->where('stock', '>', 10)->count() }}</h3>
+                    <p>In Stock</p>
+                  </div>
+                  <div class="icon">
+                    <i class="bi bi-check-circle"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-6">
+                <div class="small-box bg-warning">
+                  <div class="inner">
+                    <h3>{{ $products->where('stock', '<', 10)->where('stock', '>', 0)->count() }}</h3>
+                    <p>Low Stock</p>
+                  </div>
+                  <div class="icon">
+                    <i class="bi bi-exclamation-triangle"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-6">
+                <div class="small-box bg-danger">
+                  <div class="inner">
+                    <h3>{{ $products->where('stock', 0)->count() }}</h3>
+                    <p>Out of Stock</p>
+                  </div>
+                  <div class="icon">
+                    <i class="bi bi-x-circle"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="app-content">
           <!--begin::Container-->
           <div class="container-fluid">
@@ -678,7 +735,7 @@
                           <path
                             stroke-linecap="round"
                             stroke-linejoin="round"
-                            d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 00-3.7-3.7 48.678 48.678 0 00-7.324 0 4.006 4.006 0 00-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3l-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 003.7 3.7 48.656 48.656 0 007.324 0 4.006 4.006 0 003.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3l-3 3"
+                            d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 00-3.7-3.7 48.678 48.678 0 00-7.324 0 4.006 4.006 0 00-3.7-3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3l-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 003.7 3.7 48.656 48.656 0 007.324 0 4.006 4.006 0 003.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3l-3 3"
                           ></path>
                         </svg>
                       </p>
@@ -714,7 +771,7 @@
                         <span class="fw-bold">
                           <i class="bi bi-graph-up-arrow text-info"></i> 0.8%
                         </span>
-                        <span class="text-secondary">SALES RATE</span>
+                        -secondary">SALES<span class="text RATE</span>
                       </p>
                     </div>
                     <!-- /.d-flex -->
