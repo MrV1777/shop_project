@@ -130,7 +130,7 @@
                         <select class="form-control" id="category" name="category" required>
                           <option value="">Select Category</option>
                           <option value="CPU" {{ $product->category == 'CPU' ? 'selected' : '' }}>CPU</option>
-                          <option value="GPU" {{ $product->category == 'GPU' ? 'selected' : '' }}>GPU</option>
+                          <option value="VGA" {{ $product->category == 'VGA' ? 'selected' : '' }}>VGA</option>
                           <option value="RAM" {{ $product->category == 'RAM' ? 'selected' : '' }}>RAM</option>
                         </select>
                       </div>

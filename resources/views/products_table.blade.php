@@ -117,7 +117,7 @@
                           <select class="form-control" id="category" name="category" required>
                             <option value="">Select Category</option>
                             <option value="CPU">CPU</option>
-                            <option value="GPU">GPU</option>
+                            <option value="VGA">VGA</option>
                             <option value="RAM">RAM</option>
                           </select>
                         </div>
