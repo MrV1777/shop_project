@@ -113,6 +113,12 @@ return [
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
 
+        'mongodb' => [
+            'driver' => 'mongodb',
+            'dsn' => env('MONGODB_DSN', 'mongodb+srv://Sainoy:Saiynoi12@cluster0.bbfsf6s.mongodb.net/?authSource=admin'),
+            'database' => env('MONGODB_DATABASE', 'ProductDB'),
+        ],
+
     ],
 
     /*
