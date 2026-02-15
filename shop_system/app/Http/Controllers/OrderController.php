@@ -10,10 +10,22 @@ class OrderController extends Controller
     /**
      * Display a listing of the orders.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::all();
-        return view('order.order', compact('orders'));
+        $filter = $request->get('filter', 'all');
+        
+        // Get counts for all statuses
+        $pendingCount = Order::where('status', 'pending')->count();
+        $completedCount = Order::where('status', 'completed')->count();
+        $cancelledCount = Order::where('status', 'cancelled')->count();
+        
+        if ($filter === 'all') {
+            $orders = Order::all();
+        } else {
+            $orders = Order::where('status', $filter)->get();
+        }
+        
+        return view('order.order', compact('orders', 'filter', 'pendingCount', 'completedCount', 'cancelledCount'));
     }
 
     /**

@@ -66,6 +66,21 @@
             background: white;
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+        }
+        .stat-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .stat-item.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .stat-item.active .stat-value {
+            background: rgba(255,255,255,0.2);
+            color: white;
         }
         .stat-icon {
             font-size: 24px;
@@ -143,26 +158,28 @@
             <h3>📋 All Registered Users</h3>
             
             @php
-                $totalUsers = $users->count();
-                $adminCount = $users->where('role', 'admin')->count();
-                $userCount = $users->where('role', 'user')->count();
+                $filter = $filter ?? 'all';
+                $filteredUsers = $users->whereIn('role', ['user', 'admin']);
+                $totalUsers = $filteredUsers->count();
+                $adminCount = $filteredUsers->where('role', 'admin')->count();
+                $userCount = $filteredUsers->where('role', 'user')->count();
             @endphp
             <div class="user-stats">
-                <div class="stat-item">
+                <a href="{{ route('user.index') }}?filter=all" class="stat-item {{ $filter == 'all' ? 'active' : '' }}">
                     <span class="stat-icon">👥</span>
                     <span class="stat-label">Total Users</span>
                     <span class="stat-value">{{ $totalUsers }}</span>
-                </div>
-                <div class="stat-item">
+                </a>
+                <a href="{{ route('user.index') }}?filter=admin" class="stat-item {{ $filter == 'admin' ? 'active' : '' }}">
                     <span class="stat-icon">👑</span>
                     <span class="stat-label">Admins</span>
                     <span class="stat-value">{{ $adminCount }}</span>
-                </div>
-                <div class="stat-item">
+                </a>
+                <a href="{{ route('user.index') }}?filter=user" class="stat-item {{ $filter == 'user' ? 'active' : '' }}">
                     <span class="stat-icon">👤</span>
                     <span class="stat-label">Users</span>
                     <span class="stat-value">{{ $userCount }}</span>
-                </div>
+                </a>
             </div>
             
             <div class="table-wrapper">

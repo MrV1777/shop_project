@@ -36,6 +36,35 @@
             font-size: 12px;
         }
         .btn-update:hover { background: #4338ca; }
+        
+        .order-filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .filter-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        .filter-btn:hover {
+            transform: translateY(-2px);
+        }
+        .filter-btn.active {
+            border: 2px solid currentColor;
+        }
+        .filter-all { background: #e0e7ff; color: #4338ca; }
+        .filter-all.active { background: #4338ca; color: white; }
+        .filter-pending { background: #fff3cd; color: #856404; }
+        .filter-pending.active { background: #856404; color: white; }
+        .filter-completed { background: #d4edda; color: #155724; }
+        .filter-completed.active { background: #155724; color: white; }
+        .filter-cancelled { background: #f8d7da; color: #721c24; }
+        .filter-cancelled.active { background: #721c24; color: white; }
     </style>
 </head>
 <body>
@@ -51,6 +80,29 @@
                 <h3>📦 Order Management List</h3>
                 <a href="{{ route('order.add') }}" class="btn-add" style="padding: 8px 16px; background: #10b981; color: white; border-radius: 5px; text-decoration: none;">+ Create Order</a>
             </div>
+            
+            @php
+                $filter = $filter ?? 'all';
+                $pendingCount = isset($pendingCount) ? $pendingCount : 0;
+                $completedCount = isset($completedCount) ? $completedCount : 0;
+                $cancelledCount = isset($cancelledCount) ? $cancelledCount : 0;
+            @endphp
+            
+            <div class="order-filters">
+                <a href="{{ route('order.index') }}?filter=all" class="filter-btn filter-all {{ $filter == 'all' ? 'active' : '' }}">
+                    📋 All ({{ $pendingCount + $completedCount + $cancelledCount }})
+                </a>
+                <a href="{{ route('order.index') }}?filter=pending" class="filter-btn filter-pending {{ $filter == 'pending' ? 'active' : '' }}">
+                    ⏳ Pending ({{ $pendingCount }})
+                </a>
+                <a href="{{ route('order.index') }}?filter=completed" class="filter-btn filter-completed {{ $filter == 'completed' ? 'active' : '' }}">
+                    ✅ Completed ({{ $completedCount }})
+                </a>
+                <a href="{{ route('order.index') }}?filter=cancelled" class="filter-btn filter-cancelled {{ $filter == 'cancelled' ? 'active' : '' }}">
+                    ❌ Cancelled ({{ $cancelledCount }})
+                </a>
+            </div>
+            
             <div class="table-wrapper">
                 <table>
                     <thead>

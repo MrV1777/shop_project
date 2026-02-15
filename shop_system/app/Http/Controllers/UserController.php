@@ -10,10 +10,17 @@ class UserController extends Controller
     /**
      * Display a listing of the users.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::all();
-        return view('user.userproduct', compact('users'));
+        $filter = $request->get('filter', 'all');
+        
+        if ($filter === 'all') {
+            $users = User::whereIn('role', ['user', 'admin'])->get();
+        } else {
+            $users = User::where('role', $filter)->get();
+        }
+        
+        return view('user.userproduct', compact('users', 'filter'));
     }
 
     /**
@@ -44,8 +51,9 @@ class UserController extends Controller
     public function edit(string $id)
     {
         $user = User::findOrFail($id);
-        $users = User::all();
-        return view('user.userproduct', compact('user', 'users'));
+        $users = User::whereIn('role', ['user', 'admin'])->get();
+        $filter = 'all';
+        return view('user.userproduct', compact('user', 'users', 'filter'));
     }
 
     /**

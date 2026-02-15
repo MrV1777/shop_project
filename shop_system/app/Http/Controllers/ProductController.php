@@ -4,16 +4,36 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Category;
 
 class ProductController extends Controller
 {
     /**
      * Display a listing of the products.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::all();
-        return view('product.product', compact('products'));
+        $filter = $request->get('filter', 'all');
+        
+        // Get categories from database
+        $categories = Category::all();
+        
+        // Get counts per category
+        $categoryCounts = [];
+        $totalCount = 0;
+        foreach ($categories as $cat) {
+            $count = Product::where('category', $cat->name)->count();
+            $categoryCounts[$cat->name] = $count;
+            $totalCount += $count;
+        }
+        
+        if ($filter === 'all') {
+            $products = Product::all();
+        } else {
+            $products = Product::where('category', $filter)->get();
+        }
+        
+        return view('product.product', compact('products', 'filter', 'categoryCounts', 'totalCount', 'categories'));
     }
 
     /**
@@ -21,7 +41,10 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('product.product-add');
+        // Get categories from database
+        $categories = Category::all();
+        
+        return view('product.product-add', compact('categories'));
     }
 
     /**
@@ -64,7 +87,22 @@ class ProductController extends Controller
     public function edit(string $id)
     {
         $product = Product::findOrFail($id);
-        return view('product.product-edit', compact('product'));
+        
+        // Get categories from database
+        $categories = Category::all();
+        
+        // Get counts per category
+        $categoryCounts = [];
+        $totalCount = 0;
+        foreach ($categories as $cat) {
+            $count = Product::where('category', $cat->name)->count();
+            $categoryCounts[$cat->name] = $count;
+            $totalCount += $count;
+        }
+        $products = Product::all();
+        $filter = 'all';
+        
+        return view('product.product-edit', compact('product', 'products', 'filter', 'categoryCounts', 'totalCount', 'categories'));
     }
 
     /**

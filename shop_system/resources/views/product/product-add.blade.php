@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Product - Shop System</title>
+    <title>Add Product - Shop System</title>
     <link rel="stylesheet" href="{{ asset('css/header.css') }}">
     <link rel="stylesheet" href="{{ asset('css/product.css') }}">
 </head>
@@ -18,33 +18,26 @@
         @endif
 
         <div class="product-card">
-            <h2>Edit Product</h2>
+            <h2>Add New Product</h2>
             
-            <form action="{{ route('product.update', $product->_id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('product.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                @method('PUT')
                 
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="image">Product Image</label>
-                        @if($product->image)
-                            <div class="current-image">
-                                <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="product-image-small">
-                                <p>Current image</p>
-                            </div>
-                        @endif
                         <input type="file" id="image" name="image" accept="image/*">
                     </div>
                     <div class="form-group">
                         <label for="name">Product Name</label>
-                        <input type="text" id="name" name="name" value="{{ $product->name }}" required>
+                        <input type="text" id="name" name="name" required>
                     </div>
                     <div class="form-group">
                         <label for="category">Category</label>
                         <select id="category" name="category" required>
-                            @if(isset($categories))
+                            @if(isset($categories) && count($categories) > 0)
                                 @foreach($categories as $cat)
-                                    <option value="{{ $cat->name }}" {{ $product->category == $cat->name ? 'selected' : '' }}>
+                                    <option value="{{ $cat->name }}">
                                         @if($cat->icon && file_exists(public_path($cat->icon)))
                                             🖼️ {{ $cat->name }}
                                         @else
@@ -53,29 +46,30 @@
                                     </option>
                                 @endforeach
                             @else
-                                <option value="CPU" {{ $product->category == 'CPU' ? 'selected' : '' }}>💻 CPU</option>
-                                <option value="GPU" {{ $product->category == 'GPU' ? 'selected' : '' }}>🎮 GPU</option>
-                                <option value="RAM" {{ $product->category == 'RAM' ? 'selected' : '' }}>🧮 RAM</option>
-                                <option value="Storage" {{ $product->category == 'Storage' ? 'selected' : '' }}>💾 Storage</option>
-                                <option value="Motherboard" {{ $product->category == 'Motherboard' ? 'selected' : '' }}>🔌 Motherboard</option>
+                                <option value="">No categories available</option>
+                                <option value="CPU">💻 CPU</option>
+                                <option value="GPU">🎮 GPU</option>
+                                <option value="RAM">🧮 RAM</option>
+                                <option value="Storage">💾 Storage</option>
+                                <option value="Motherboard">🔌 Motherboard</option>
                             @endif
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="price">Price (฿)</label>
-                        <input type="number" id="price" name="price" value="{{ $product->price }}" step="0.01" min="0" required>
+                        <input type="number" id="price" name="price" step="0.01" min="0" required>
                     </div>
                     <div class="form-group">
                         <label for="stock">Stock</label>
-                        <input type="number" id="stock" name="stock" value="{{ $product->stock }}" min="0" required>
+                        <input type="number" id="stock" name="stock" min="0" required>
                     </div>
                     <div class="form-group full-width">
                         <label for="description">Description</label>
-                        <input type="text" id="description" name="description" value="{{ $product->description }}">
+                        <input type="text" id="description" name="description">
                     </div>
                 </div>
                 
-                <button type="submit" class="btn-add">Update Product</button>
+                <button type="submit" class="btn-add">Add Product</button>
                 <a href="{{ route('product.index') }}" class="btn-cancel">Cancel</a>
             </form>
         </div>
